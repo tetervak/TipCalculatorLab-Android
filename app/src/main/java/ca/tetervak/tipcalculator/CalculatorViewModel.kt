@@ -1,33 +1,44 @@
 package ca.tetervak.tipcalculator
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class CalculatorViewModel: ViewModel() {
 
-    var amountInput by mutableStateOf("")
-        private set
+    private val _uiState = MutableStateFlow(CalculatorUiState())
+    val uiState = _uiState.asStateFlow()
 
-    var tipInput by mutableStateOf("")
-        private set
+    private val amountInput: String
+    get() = _uiState.value.amountInput
 
-    var roundUp by mutableStateOf(false)
-        private set
+    private val tipInput: String
+    get() = _uiState.value.tipInput
+
+    private val roundUp: Boolean
+    get() = _uiState.value.roundUp
+
 
     fun updateAmountInput(newInput: String) {
-        amountInput = newInput
+        _uiState.value = _uiState.value.copy(
+            amountInput = newInput,
+            tip = calculateTip()
+        )
     }
 
     fun updateTipInput(newInput: String) {
-        tipInput = newInput
+        _uiState.value = _uiState.value.copy(
+            tipInput = newInput,
+            tip = calculateTip()
+        )
     }
 
     fun updateRoundUp(newRoundUp: Boolean) {
-        roundUp = newRoundUp
+        _uiState.value = _uiState.value.copy(
+            roundUp = newRoundUp,
+            tip = calculateTip()
+        )
     }
-
 
     fun calculateTip(): Double {
         val amount = amountInput.toDoubleOrNull() ?: 0.0

@@ -27,6 +27,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,7 +74,7 @@ fun AppRootScreenPreview(){
 @Composable
 fun TipCalculatorLayout(modifier: Modifier = Modifier) {
     val viewModel: CalculatorViewModel = viewModel()
-
+    val uiState: CalculatorUiState by viewModel.uiState.collectAsState()
     val tip = viewModel.calculateTip()
 
     Column(
@@ -98,7 +99,7 @@ fun TipCalculatorLayout(modifier: Modifier = Modifier) {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
             ),
-            value = viewModel.amountInput,
+            value = uiState.amountInput,
             onValueChanged = viewModel::updateAmountInput,
             modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
         )
@@ -109,12 +110,12 @@ fun TipCalculatorLayout(modifier: Modifier = Modifier) {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
-            value = viewModel.tipInput,
+            value = uiState.tipInput,
             onValueChanged = viewModel::updateTipInput,
             modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
         )
         RoundTheTipRow(
-            roundUp = viewModel.roundUp,
+            roundUp = uiState.roundUp,
             onRoundUpChanged = viewModel::updateRoundUp,
             modifier = Modifier.padding(bottom = 32.dp)
         )
