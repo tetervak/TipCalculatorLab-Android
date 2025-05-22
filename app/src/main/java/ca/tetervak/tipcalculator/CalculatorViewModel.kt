@@ -2,12 +2,13 @@ package ca.tetervak.tipcalculator
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class CalculatorViewModel: ViewModel() {
 
     private val _uiState = MutableStateFlow(CalculatorUiState())
-    val uiState = _uiState.asStateFlow()
+    val uiState: StateFlow<CalculatorUiState> = _uiState.asStateFlow()
 
     private val amountInput: String
     get() = _uiState.value.amountInput
@@ -40,7 +41,7 @@ class CalculatorViewModel: ViewModel() {
         )
     }
 
-    fun calculateTip(): Double {
+    private fun calculateTip(): Double {
         val amount = amountInput.toDoubleOrNull() ?: 0.0
         val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
         return calculateTip(amount, tipPercent, roundUp)
