@@ -75,7 +75,6 @@ fun AppRootScreenPreview(){
 fun TipCalculatorLayout(modifier: Modifier = Modifier) {
     val viewModel: CalculatorViewModel = viewModel()
     val uiState: CalculatorUiState by viewModel.uiState.collectAsState()
-    val tip = viewModel.calculateTip()
 
     Column(
         modifier = modifier
@@ -120,7 +119,7 @@ fun TipCalculatorLayout(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 32.dp)
         )
         Text(
-            text = stringResource(R.string.tip_amount, tip),
+            text = stringResource(R.string.tip_amount, uiState.tip),
             style = MaterialTheme.typography.displaySmall
         )
         Spacer(modifier = Modifier.height(150.dp))
